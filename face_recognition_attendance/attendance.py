@@ -8,6 +8,7 @@ import xlrd
 from xlwt import Workbook
 import time
 import delete_file
+
 delete_file.deleteFile()
 
 path = 'Pictures'
@@ -58,21 +59,27 @@ record_check = os.listdir('Excel')
 # Marking attendance function
 
 def markAttendance(name, surname):
-    try:
-        data = xlrd.open_workbook("client_record.xls")
-        table = data.sheet_by_index(0)
-        for k in range(len(details)):
-            if name == names[k].upper() and surname == surnames[k].upper():
-                sheet1.write(k + 1, 2, 'Yes')
-                wb.save("Excel/client_record.xls")
-                now = datetime.now()
-                dateString = now.strftime('%H:%M:%S')
-                sheet1.write(k + 1, 3, dateString)
-                wb.save('Excel/client_record.xls')
-
-    except:
-        print('Failed open the Excel file.')
-        sys.exit(1)
+    data = xlrd.open_workbook("Excel/client_record.xls")
+    table = data.sheet_by_index(0)
+    for i in range(len(details)):
+        if table.cell(i + 1, 2).value is not None:
+            try:
+                for k in range(len(details)):
+                    if name == names[k].upper() and surname == surnames[k].upper():
+                        sheet1.write(k + 1, 2, 'Yes')
+                        wb.save("Excel/client_record.xls")
+                        now = datetime.now()
+                        dateString = now.strftime('%H:%M:%S')
+                        sheet1.write(k + 1, 3, dateString)
+                        wb.save('Excel/client_record.xls')
+                print('\nAttendance registered!\nNext person please!\n')
+                time.sleep(3)
+                cap
+            except:
+                print('Attendance already registered.')
+                pass
+        else:
+            pass
 
 
 # create excel sheet and add names from images
@@ -96,10 +103,8 @@ print('\nStored images and names added to database!\n')
 
 time.sleep(1)
 
-print('Encoding in progress...\n')
 
-
-# Encoding images
+# Encoding images function
 
 def findEncodings(images):
     encodeList = []
@@ -110,8 +115,18 @@ def findEncodings(images):
     return encodeList
 
 
-encodeListKnown = findEncodings(images)
-print('Encoding complete\n')
+# Speed up image encoding
+
+if os.path.exists('encodedImages.npy'):
+    print('Encoded database found\nLoading encoded images...\n')
+    encodeListKnown = np.load('encodedImages.npy')
+    print('Loading complete!\n')
+else:
+    print('Encoding in progress...\n')
+    encodeListKnown = findEncodings(images)
+    print(encodeListKnown)
+    np.save('encodedImages.npy', np.asarray(encodeListKnown))
+    print('Encoding complete\n')
 
 # OPEN CV read camera and face matching
 
@@ -149,6 +164,8 @@ while True:
             cv2.putText(img, fullName, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
 
             markAttendance(name, surname)
+
+            cap.release
 
     cv2.imshow('Webcam', img)
 
