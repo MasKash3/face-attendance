@@ -26,18 +26,6 @@ def findEncodings(images):
     return encodeList
 
 
-def markAttendance(name):
-    with open('store_attendance.csv','r+') as f: # r+ for read and write
-        myDataList = f.readlines()
-        nameList = []
-        for line in myDataList:
-            entry = line.split(',')
-            nameList.append(entry[0])
-        if name not in nameList:
-            now = datetime.now()
-            dtString = now.strftime('%H:%M:%S')
-            f.writelines(f'\n{name},{dtString}')
-
 encodeListKnown = findEncodings(images)
 print('Encoding complete')
 
