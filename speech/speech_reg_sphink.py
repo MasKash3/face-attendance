@@ -1,4 +1,5 @@
 import speech_recognition as sr
+import time
 
 r = sr.Recognizer()
 m = sr.Microphone()
@@ -6,6 +7,8 @@ m = sr.Microphone()
 with m as source:
     print("Say something")
     audio = r.listen(source)
+
+time.sleep(3)
 
 try:
     print("Sphinx thinks you said " + r.recognize_sphinx(audio))

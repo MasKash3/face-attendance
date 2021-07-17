@@ -7,6 +7,12 @@ import numpy as np
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 
+from kivy.core.window import Window
+from kivy.uix.widget import Widget
+
+from kivy.base import runTouchApp
+
+
 class FaceTrackingKivy(App):
     def build(self):
 
@@ -34,8 +40,24 @@ class FaceTrackingKivy(App):
                 cap.release()
                 cv2.destroyAllWindows()
 
+    class KeyboardListener(Widget):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            self._keyboard = Window.request_keyboard(self._keyboard_closed, self, 'text')
+            if self._keyboard.widget:
+                pass
+            self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+        def _on_keyboard_down(self, keyboard, keycode, text):
+            if keycode[1] == 'q':
+                FaceTrackingKivy().stop()
+                Window.close()
+                keyboard.release()
+
+            return True
 
 
 if __name__ == '__main__':
     FaceTrackingKivy().run()
+    runTouchApp(KeyboardListener())
 
