@@ -1,16 +1,13 @@
 import sys
-
 import cv2
 import numpy as np
 import face_recognition
 import os
 from datetime import datetime
-
 import xlrd
 from xlwt import Workbook
 import time
 import delete_file
-
 delete_file.deleteFile()
 
 path = 'Pictures'
@@ -33,7 +30,7 @@ for cl in imageList:
     images.append(currImg)
     classNames.append(os.path.splitext(cl)[0])  # gets rid of the extensions
 
-# Store names and surnames
+# Store names and surnames separately
 
 for i in range(len(classNames)):
     details.append(classNames[i].split())
@@ -43,9 +40,7 @@ for j in range(len(details)):
     surnames.append(details[j][1])
 
 
-# End store names and surnames
-
-# Database
+# Create Excel database folder
 
 def createFolder(directory):
     try:
@@ -60,32 +55,35 @@ createFolder('Excel')
 record_check = os.listdir('Excel')
 
 
-# MARKING ATTENDANCE FUNCTION
+# Marking attendance function
+
 def markAttendance(name, surname):
     try:
         data = xlrd.open_workbook("client_record.xls")
         table = data.sheet_by_index(0)
-        k = 0
         for k in range(len(details)):
-            if name == names[k] and surname == surnames[k]:
+            if name == names[k].upper() and surname == surnames[k].upper():
                 sheet1.write(k + 1, 2, 'Yes')
                 wb.save("Excel/client_record.xls")
-            else:
-                sheet1.write(k + 1, 2, 'No')
-                wb.save("Excel/client_record.xls")
+                now = datetime.now()
+                dateString = now.strftime('%H:%M:%S')
+                sheet1.write(k + 1, 3, dateString)
+                wb.save('Excel/client_record.xls')
 
     except:
         print('Failed open the Excel file.')
         sys.exit(1)
 
 
-# create excel sheet and names from pictures
+# create excel sheet and add names from images
+
 if 'client_record.xls' not in record_check:
     for i in range(2):
         sheet1.col(i).width = 5000
     sheet1.write(0, 0, 'Name')
     sheet1.write(0, 1, 'Surname')
     sheet1.write(0, 2, 'Present')
+    sheet1.write(0, 3, 'Time in')
     wb.save("Excel/client_record.xls")
     k = 0
     for k in range(len(details)):
@@ -95,7 +93,6 @@ if 'client_record.xls' not in record_check:
         wb.save("Excel/client_record.xls")
 
 print('\nStored images and names added to database!\n')
-
 
 time.sleep(1)
 
@@ -113,41 +110,45 @@ def findEncodings(images):
     return encodeList
 
 
-# End encoding images
-
 encodeListKnown = findEncodings(images)
 print('Encoding complete\n')
 
-# OPEN CV read camera and match
+# OPEN CV read camera and face matching
+
 print('Looking for a registered face...')
 
 cap = cv2.VideoCapture(0)
 
 while True:
-    success, img = cap.read()
+    ret, img = cap.read()
     imgS = cv2.resize(img, (0, 0), None, 0.25, 0.25)  # 0.25 are the scales, 1/4th of the size
-    # We do that to reduce the size and speed up the process
+    # We do that to reduce the video feed size and speed up the process
     imgS = cv2.cvtColor(imgS, cv2.COLOR_BGR2RGB)
 
     faceLocInFrame = face_recognition.face_locations(imgS)
     encodeCurrFrame = face_recognition.face_encodings(imgS, faceLocInFrame)
 
     for encodeFace, faceLoc in zip(encodeCurrFrame, faceLocInFrame):  # zip because we are using them in the same loop
-        # compare encodings of saved faces compares to video from stream
+        # compare encodings of saved faces to the one from the video stream
         matches = face_recognition.compare_faces(encodeListKnown, encodeFace)
         faceDis = face_recognition.face_distance(encodeListKnown, encodeFace)
         # lowest face distance means better match
         matchIndex = np.argmin(faceDis)
 
         if matches[matchIndex]:
-            name = classNames[matchIndex].upper()
+            fullName = classNames[matchIndex].upper()
+            name = fullName.split()[0]
+            surname = fullName.split()[1]
+            print('\nFace found: ' + name, surname)
             y1, x2, y2, x1 = faceLoc
-            # Since we were working on 1/4th the size, we need to go back to normal size
+            # Since I was working on 1/4th of the initial size, we need to go back to normal size
             y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            # From here it's just for beauty
+            # From here it's just for looking good
             cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-            cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+            cv2.putText(img, fullName, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+
+            markAttendance(name, surname)
 
     cv2.imshow('Webcam', img)
 
