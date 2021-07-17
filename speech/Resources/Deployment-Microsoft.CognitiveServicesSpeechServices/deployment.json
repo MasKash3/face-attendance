@@ -1,0 +1,58 @@
+{
+  "id": "/subscriptions/ec03d70c-ea31-4aad-a2f1-fc295a6b4272/resourceGroups/SpeechProgram/providers/Microsoft.Resources/deployments/Microsoft.CognitiveServicesSpeechServices",
+  "name": "Microsoft.CognitiveServicesSpeechServices",
+  "type": "Microsoft.Resources/deployments",
+  "tags": {
+    "primaryResourceId": "/subscriptions/ec03d70c-ea31-4aad-a2f1-fc295a6b4272/resourcegroups/SpeechProgram/providers/Microsoft.CognitiveServices/accounts/speechTrial",
+    "marketplaceItemId": "Microsoft.CognitiveServicesSpeechServices"
+  },
+  "properties": {
+    "templateHash": "10533962865229907385",
+    "parameters": {
+      "name": {
+        "type": "String",
+        "value": "speechTrial"
+      },
+      "location": {
+        "type": "String",
+        "value": "eastus"
+      },
+      "apiType": {
+        "type": "String",
+        "value": "SpeechServices"
+      },
+      "sku": {
+        "type": "String",
+        "value": "F0"
+      }
+    },
+    "mode": "Incremental",
+    "debugSetting": {
+      "detailLevel": "None"
+    },
+    "provisioningState": "Succeeded",
+    "timestamp": "2021-07-16T22:30:04.143452Z",
+    "duration": "PT1M21.2882175S",
+    "correlationId": "1dcb6fbb-c1ca-4658-9f9a-44c94fe51bba",
+    "providers": [
+      {
+        "namespace": "Microsoft.CognitiveServices",
+        "resourceTypes": [
+          {
+            "resourceType": "accounts",
+            "locations": [
+              "eastus"
+            ]
+          }
+        ]
+      }
+    ],
+    "dependencies": [],
+    "outputResources": [
+      {
+        "id": "/subscriptions/ec03d70c-ea31-4aad-a2f1-fc295a6b4272/resourceGroups/SpeechProgram/providers/Microsoft.CognitiveServices/accounts/speechTrial"
+      }
+    ],
+    "validationLevel": "Template"
+  }
+}

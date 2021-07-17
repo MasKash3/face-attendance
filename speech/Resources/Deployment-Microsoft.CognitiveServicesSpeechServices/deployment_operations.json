@@ -1,0 +1,32 @@
+[
+  {
+    "id": "/subscriptions/ec03d70c-ea31-4aad-a2f1-fc295a6b4272/resourceGroups/SpeechProgram/providers/Microsoft.Resources/deployments/Microsoft.CognitiveServicesSpeechServices/operations/3652BE6DBBCC9B51",
+    "operationId": "3652BE6DBBCC9B51",
+    "properties": {
+      "provisioningOperation": "Create",
+      "provisioningState": "Succeeded",
+      "timestamp": "2021-07-16T22:30:03.9815056Z",
+      "duration": "PT1M16.0609549S",
+      "trackingId": "0907dfd2-b43d-4314-ac48-1520da500e55",
+      "serviceRequestId": "8954eb38-e6ff-4ee5-9c89-f729b2f7d8d6",
+      "statusCode": "Created",
+      "targetResource": {
+        "id": "/subscriptions/ec03d70c-ea31-4aad-a2f1-fc295a6b4272/resourceGroups/SpeechProgram/providers/Microsoft.CognitiveServices/accounts/speechTrial",
+        "resourceType": "Microsoft.CognitiveServices/accounts",
+        "resourceName": "speechTrial"
+      }
+    }
+  },
+  {
+    "id": "/subscriptions/ec03d70c-ea31-4aad-a2f1-fc295a6b4272/resourceGroups/SpeechProgram/providers/Microsoft.Resources/deployments/Microsoft.CognitiveServicesSpeechServices/operations/08585751323626223820",
+    "operationId": "08585751323626223820",
+    "properties": {
+      "provisioningOperation": "EvaluateDeploymentOutput",
+      "provisioningState": "Succeeded",
+      "timestamp": "2021-07-16T22:30:04.110029Z",
+      "duration": "PT1M16.1894783S",
+      "trackingId": "0b3c31f2-7b8e-4eca-b4f0-c36c46b52669",
+      "statusCode": "OK"
+    }
+  }
+]
