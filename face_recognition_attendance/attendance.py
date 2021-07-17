@@ -30,6 +30,7 @@ for j in range(len(details)):
     names.append(details[j][0])
     surnames.append(details[j][1])
 
+
 # End store names and surnames
 
 # Database
@@ -61,7 +62,6 @@ if 'client_record.xls' not in record_check:
         sheet1.write(k + 1, 0, names[k].upper())
         sheet1.write(k + 1, 1, surnames[k].upper())
         wb.save("Excel/client_record.xls")
-
 
 print('\nStored images and names added to database!\n')
 
