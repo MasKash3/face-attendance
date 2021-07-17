@@ -1,10 +1,17 @@
+import sys
+
 import cv2
 import numpy as np
 import face_recognition
 import os
 from datetime import datetime
+
+import xlrd
 from xlwt import Workbook
 import time
+import delete_file
+
+delete_file.deleteFile()
 
 path = 'Pictures'
 images = []
@@ -12,6 +19,11 @@ classNames = []
 details = []
 names = []
 surnames = []
+
+# Excel files
+wb = Workbook()
+sheet1 = wb.add_sheet('sheet 1')
+
 imageList = os.listdir(path)
 
 # Read images and get rid of extensions
@@ -47,14 +59,33 @@ createFolder('Excel')
 
 record_check = os.listdir('Excel')
 
+
+# MARKING ATTENDANCE FUNCTION
+def markAttendance(name, surname):
+    try:
+        data = xlrd.open_workbook("client_record.xls")
+        table = data.sheet_by_index(0)
+        k = 0
+        for k in range(len(details)):
+            if name == names[k] and surname == surnames[k]:
+                sheet1.write(k + 1, 2, 'Yes')
+                wb.save("Excel/client_record.xls")
+            else:
+                sheet1.write(k + 1, 2, 'No')
+                wb.save("Excel/client_record.xls")
+
+    except:
+        print('Failed open the Excel file.')
+        sys.exit(1)
+
+
 # create excel sheet and names from pictures
 if 'client_record.xls' not in record_check:
-    wb = Workbook()
-    sheet1 = wb.add_sheet('sheet 1')
     for i in range(2):
         sheet1.col(i).width = 5000
     sheet1.write(0, 0, 'Name')
     sheet1.write(0, 1, 'Surname')
+    sheet1.write(0, 2, 'Present')
     wb.save("Excel/client_record.xls")
     k = 0
     for k in range(len(details)):
@@ -64,6 +95,7 @@ if 'client_record.xls' not in record_check:
         wb.save("Excel/client_record.xls")
 
 print('\nStored images and names added to database!\n')
+
 
 time.sleep(1)
 
