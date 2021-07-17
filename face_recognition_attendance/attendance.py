@@ -8,7 +8,6 @@ import xlrd
 from xlwt import Workbook
 import time
 import delete_file
-
 delete_file.deleteFile()
 
 path = 'Pictures'
@@ -19,8 +18,11 @@ names = []
 surnames = []
 
 # Excel files
+
 wb = Workbook()
 sheet1 = wb.add_sheet('sheet 1')
+
+# Get directory for images location
 
 imageList = os.listdir(path)
 
@@ -85,7 +87,7 @@ def markAttendance(name, surname):
 # create excel sheet and add names from images
 
 if 'client_record.xls' not in record_check:
-    for i in range(2):
+    for i in range(4):
         sheet1.col(i).width = 5000
     sheet1.write(0, 0, 'Name')
     sheet1.write(0, 1, 'Surname')
@@ -122,9 +124,8 @@ if os.path.exists('encodedImages.npy'):
     encodeListKnown = np.load('encodedImages.npy')
     print('Loading complete!\n')
 else:
-    print('Encoding in progress...\n')
+    print('No encoded database found.\nEncoding in progress...\n')
     encodeListKnown = findEncodings(images)
-    print(encodeListKnown)
     np.save('encodedImages.npy', np.asarray(encodeListKnown))
     print('Encoding complete\n')
 
@@ -167,7 +168,7 @@ while True:
 
             cap.release
 
-    cv2.imshow('Webcam', img)
+    cv2.imshow('Camera', img)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
