@@ -3,6 +3,7 @@ import numpy as np
 import face_recognition
 import os
 from datetime import datetime
+from xlwt import Workbook
 
 path = 'Pictures'
 images = []
@@ -25,6 +26,29 @@ def findEncodings(images):
         encodeList.append(encode)
     return encodeList
 
+def createFolder(directory):
+
+    try:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    except OSError:
+        print('Error in creating directory: ' + directory)
+
+createFolder('Excel')
+
+record_check = os.listdir('Excel')
+
+if 'client_record.xls' not in record_check:
+    wb = Workbook()
+    sheet1 = wb.add_sheet('sheet 1')
+    for i in range(5):
+        sheet1.col(i).width = 5000
+    sheet1.write(0, 0, 'Name')
+    sheet1.write(0, 1, 'Surname')
+    sheet1.write(0, 1, 'Surname')
+    sheet1.write(0, 1, 'Surname')
+    sheet1.write(0, 1, 'Surname')
+    wb.save("Excel/client_record.xls")
 
 encodeListKnown = findEncodings(images)
 print('Encoding complete')
