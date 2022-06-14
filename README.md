@@ -1,2 +1,2 @@
 # face-attendance
-Take the attendance of people using openCV and stores them into an Excel sheet.
+Take the attendance of people using face recognition with openCV and stores them into an Excel sheet.
